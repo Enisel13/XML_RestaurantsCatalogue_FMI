@@ -21,7 +21,7 @@
                     </xs:key>
                     <xs:keyref name="restaurantRegionKeyRef" refer="regionKey">
                         <xs:selector xpath="restaurantCatalogue/restaurants/restaurant" />
-                        <xs:field xpath="@region">
+                        <xs:field xpath="@region" />
                     </xs:keyref>
                     <xs:keyref name="restaurantChainKeyRef" refer="chainKey">
                         <xs:selector xpath="restaurantCatalogue/restaurants/restaurant" />
@@ -35,7 +35,7 @@
     <xs:complexType name="restaurantType">
         <xs:sequence>
             <xs:element name="name" type="xs:string" />
-            <xs:element name="category" type="restaurantCategory" />
+            <xs:element name="categoryList" type="categoryListType" />
             <xs:element name="picture" type="pictureType" />
             <xs:element name="address" />
             <xs:element name="phone" type="xs:string" minOccurs="0" />
@@ -54,10 +54,93 @@
         <xs:attribute name="chain" type="xs:IDREF" />
     </xs:complexType>
 
+    <xs:complexType name="categoryListType">
+        <xs:sequence>
+            <xs:element name="category" type="restaurantCategory" minOccurs="1" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="restaurantCategory">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="fish" />
+            <xs:enumeration value="vegan" />
+            <xs:enumeration value="vegetarian" />
+            <xs:enumeration value="asian" />
+            <xs:enumeration value="italian" />
+            <xs:enumeration value="bulgarian" />
+             <xs:enumeration value="fastFood" />
+             <xs:enumeration value="grill" />
+        </xs:restriction>
+    </xs:simpleType>
     
+    <xs:complexType name="pictureType">
+        <xs:attribute name="source" type="xs:ENTITY" use="required" />
+    </xs:complexType>
+
+    <xs:element name="gallery">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="image" type="pictureType" minOccurs="1" maxOccurs="50" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
     <xs:element name="address" type="xs:string">
         <xs:unique name="restaurantUniqueAddress">
             <xs:selector xpath="." />
             <xs:field xpath="." />
         </xs:unique>
     </xs:element>
+
+    <xs:simpleType name="priceCategoryType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="$" />
+            <xs:enumeration value="$$" />
+            <xs:enumeration value="$$$" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="servicesType">
+        <xs:attribute name="wifi" type="xs:boolean" default="false" />
+        <xs:attribute name="delivery" type="xs:boolean" default="false" />
+        <xs:attribute name="kidsArea" type="xs:boolean" default="false" />
+        <xs:attribute name="outdoorSeating" type="xs:boolean" default="false" />
+        <xs:attribute name="liveMusic" type="xs:boolean" default="false" />
+        <xs:attribute name="airConditioning" type="xs:boolean" default="false" />
+        <xs:attribute name="veganOptions" type="xs:boolean" default="false" />
+        <xs:attribute name="reservations" type="xs:boolean" default="false" />
+        <xs:attribute name="parking" type="xs:boolean" default="false" />
+    </xs:complexType>
+
+    <xs:element name="menu">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="dish" type="dishType" minOccurs="1" maxOccurs="unbounded" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="dishType">
+        <xs:sequence>
+            <xs:element name="name" type="xs:string" />
+            <xs:element name="price" type="xs:decimal" />
+            <xs:element name="ingredients" type="xs:string" minOccurs="0" />
+            <xs:element name="alergens" type="alergensType" minOccurs="0" />
+            <xs:element name="diet" type="dietType" minOccurs="0" />
+        </xs:sequence> 
+    </xs:complexType>
+
+    <xs:complexType name="alergensType">
+        <xs:attribute name="gluten" type="xs:boolean" default="false" />
+        <xs:attribute name="dairy" type="xs:boolean" default="false" />
+        <xs:attribute name="nuts" type="xs:boolean" default="false" />
+        <xs:attribute name="seafood" type="xs:boolean" default="false" />
+        <xs:attribute name="eggs" type="xs:boolean" default="false" />
+    </xs:complexType>
+
+    <xs:complexType name="dietType">
+        <xs:attribute name="vegan" type="xs:boolean" default="false" />
+        <xs:attribute name="vegetarian" type="xs:boolean" default="false" />
+        <xs:attribute name="lactoseFree" type="xs:boolean" default="false" />
+        <xs:attribute name="glutenFree" type="xs:boolean" default="false" />
+    </xs:complexType>
