@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:element name="restaurantCatalogue">
+        <xs:complexType>
+            <xs:all>
+                <xs:element name="restaurants" />
+                <xs:element name="chains" />
+                <xs:element name="regions" />
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+                
+    <xs:element name="restaurants">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="restaurant" type="restaurantType" minOccurs="1" maxOccurs="unbounded">
+                    <xs:key name="restaurantKey">
+                        <xs:selector xpath="." />
+                        <xs:field xpath="@id" />
+                    </xs:key>
+                    <xs:keyref name="restaurantRegionKeyRef" refer="regionKey">
+                        <xs:selector xpath="restaurantCatalogue/restaurants/restaurant" />
+                        <xs:field xpath="@region">
+                    </xs:keyref>
+                    <xs:keyref name="restaurantChainKeyRef" refer="chainKey">
+                        <xs:selector xpath="restaurantCatalogue/restaurants/restaurant" />
+                        <xs:field xpath="@chain" />
+                    </xs:keyref>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="restaurantType">
+        <xs:sequence>
+            <xs:element name="name" type="xs:string" />
+            <xs:element name="category" type="restaurantCategory" />
+            <xs:element name="picture" type="pictureType" />
+            <xs:element name="address" />
+            <xs:element name="phone" type="xs:string" minOccurs="0" />
+            <xs:element name="website" type="xs:string" minOccurs="0" />
+            <xs:element name="capacity" type="xs:integer" />
+            <xs:element name="workingHours" type="xs:string" minOccurs="0"/>
+            <xs:element name="rating" type="float_0-10" />
+            <xs:element name="priceCategory" type="priceCategoryType" />
+            <xs:element name="description" type="shortString" minOccurs="0" />
+            <xs:element name="gallery" minOccurs="0" />
+            <xs:element name="services" type="servicesType" minOccurs="1"/>
+            <xs:element name="menu" />
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:ID" use="required" />
+        <xs:attribute name="region" type="xs:IDREF" use="required" />
+        <xs:attribute name="chain" type="xs:IDREF" />
+    </xs:complexType>
+
+    
+    <xs:element name="address" type="xs:string">
+        <xs:unique name="restaurantUniqueAddress">
+            <xs:selector xpath="." />
+            <xs:field xpath="." />
+        </xs:unique>
+    </xs:element>

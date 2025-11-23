@@ -1,0 +1,27 @@
+Restaurant:
+-id?
+-name
+-picture(thumbnail)
+-chain
+-chainId?
+-region
+-city
+-cityId?
+-address
+-phone
+-website
+-capacity
+-priceCategory
+-types
+	-type
+-services
+	-service
+-description
+-rating
+-workingHours
+-gallery
+-menu
+	-dish
+		-name
+		-price
+		-ingredients
